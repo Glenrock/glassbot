@@ -3,8 +3,11 @@ import praw
 import pdb
 import re
 import os
+from urllib import urlopen
+from random import randint
 
 reddit = praw.Reddit('glassbot')
+RAWINPUT = "http://pastebin.com/raw/grKs4cDu"
 
 if not os.path.isfile("posts_replied_to.txt"):
     posts_replied_to = []
@@ -19,8 +22,11 @@ subreddit = reddit.subreddit('highqualityglass')
 for submission in subreddit.hot(limit=10):
 
     if submission.id not in posts_replied_to:
-
-        submission.reply("Hey man, that's some smooth looking glass. Really Jealous!")
+        f = urlopen(RAWINPUT)
+        f = f.read()
+        f = f.split('$$$')
+        submission.reply(f[randint(0, len(f)-1)])
+        print(f[randint(0, len(f)-1)])
         print("Bot replying to : ", submission.title)
 
         posts_replied_to.append(submission.id)
